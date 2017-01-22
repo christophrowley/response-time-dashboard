@@ -2,8 +2,11 @@
   "name": "response-time-dashboard",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "./server/index.js",
   "scripts": {
+    "build": "cd elm-app && elm-make Main.elm --output=main.html && cd ..",
+    "open": "open ./elm-app/main.html",
+    "start": "node ./server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -16,5 +19,10 @@
   "bugs": {
     "url": "https://github.com/christophrowley/response-time-dashboard/issues"
   },
-  "homepage": "https://github.com/christophrowley/response-time-dashboard#readme"
+  "homepage": "https://github.com/christophrowley/response-time-dashboard#readme",
+  "dependencies": {
+    "express": "^4.14.0",
+    "superagent": "^3.3.2",
+    "ws": "^1.1.1"
+  }
 }

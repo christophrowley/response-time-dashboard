@@ -1,2 +1,4 @@
 node_modules
+npm-debug.log
+elm-app/elm-stuff
 *DS_Store
