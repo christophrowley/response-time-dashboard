@@ -1,4 +1,5 @@
 node_modules
 npm-debug.log
 elm-app/elm-stuff
+build
 *DS_Store

@@ -4,8 +4,8 @@
   "description": "",
   "main": "./server/index.js",
   "scripts": {
-    "build": "cd elm-app && elm-make Main.elm --output=main.html && cd ..",
-    "open": "open ./elm-app/main.html",
+    "build": "cd elm-app && elm-make Main.elm --output=../build/main.html && cd ..",
+    "open": "open ./build/main.html",
     "start": "node ./server/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
