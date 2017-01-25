@@ -22,14 +22,30 @@ const wss = new WebSocket.Server({ server });
 
 wss.on('connection', ws => {
   const location = url.parse(ws.upgradeReq.url, true);
+  let continueSending = true;
 
   ws.on('message', message => {
-    console.log('received: %s', message);
+    if (message === 'stop') {
+      continueSending = false;
+    }
   });
 
-  for (let i = 0; i < messages.length; i++) {
-    setTimeout(() => ws.send(messages[i]), i * 1000);
+  function transmitLatency() {
+    const then = Date.now();
+    superagent.get('http://google.com')
+      .then(() => {
+        const now = Date.now();
+        ws.send(JSON.stringify({
+          requestedAt: then.toISOString(),
+          responseTime: now - then,
+        });
+      })
+      .catch(err => ws.send(0));
+
+    if (continueSending) transmitLatency();
   }
+
+  transmitLatency();
 });
 
 server.listen(3000, () => {
