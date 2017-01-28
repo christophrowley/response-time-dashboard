@@ -1,5 +1,6 @@
 const express = require('express');
 const http = require('http');
+const superagent = require('superagent');
 const url = require('url');
 const WebSocket = require('ws');
 
@@ -9,13 +10,6 @@ app.use(function (req, res) {
   res.send({ msg: "hello" });
 });
 
-const messages = [
-  'Hello',
-  'darkness',
-  'my',
-  'old',
-  'friend',
-];
 
 const server = http.createServer(app);
 const wss = new WebSocket.Server({ server });
@@ -23,6 +17,7 @@ const wss = new WebSocket.Server({ server });
 wss.on('connection', ws => {
   const location = url.parse(ws.upgradeReq.url, true);
   let continueSending = true;
+  console.log('Connection established');
 
   ws.on('message', message => {
     if (message === 'stop') {
@@ -31,18 +26,23 @@ wss.on('connection', ws => {
   });
 
   function transmitLatency() {
-    const then = Date.now();
+    const before = Date.now();
     superagent.get('http://google.com')
       .then(() => {
         const now = Date.now();
-        ws.send(JSON.stringify({
-          requestedAt: then.toISOString(),
-          responseTime: now - then,
-        });
+        const payload = {
+          requestedAt: new Date(before).toISOString(),
+          responseTime: now - before,
+        };
+        console.log('Sending', payload);
+        ws.send(JSON.stringify(payload));
       })
-      .catch(err => ws.send(0));
+      .catch(err => {
+        console.log('No love', err);
+        ws.send(0)
+      });
 
-    if (continueSending) transmitLatency();
+    if (continueSending) setTimeout(() => transmitLatency(), 1000);
   }
 
   transmitLatency();
