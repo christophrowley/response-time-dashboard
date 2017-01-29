@@ -1,13 +1,14 @@
 const express = require('express');
 const http = require('http');
+const path = require('path');
 const superagent = require('superagent');
 const url = require('url');
 const WebSocket = require('ws');
 
 const app = express();
 
-app.use(function (req, res) {
-  res.send({ msg: "hello" });
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../build/main.html'));
 });
 
 
